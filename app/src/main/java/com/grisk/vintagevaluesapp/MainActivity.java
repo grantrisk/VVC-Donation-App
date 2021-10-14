@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.grisk.vintagevaluesapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
