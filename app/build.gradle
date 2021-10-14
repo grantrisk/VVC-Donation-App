@@ -6,7 +6,7 @@ android {
     buildToolsVersion "31.0.0"
 
     defaultConfig {
-        applicationId "com.example.myapplication"
+        applicationId "com.grisk.vintagevaluesapp"
         minSdkVersion 21
         targetSdkVersion 31
         versionCode 1
