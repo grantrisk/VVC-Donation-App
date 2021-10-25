@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Vintage Values</string>
     <string name="logout">Logout</string>
-    <string name="email">Email</string>
-    <string name="password_label">Password</string>
+    <string name="email">Email:</string>
+    <string name="password_label">Password:</string>
     <string name="login">Login</string>
     <string name="register">Create New Account</string>
     %[argument_index$][flags][width][.precision]conversion
