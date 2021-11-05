@@ -7,12 +7,17 @@
     <string name="register">Create New Account</string>
     %[argument_index$][flags][width][.precision]conversion
     <string name="hello">Welcome %1$s!</string>
-    <string name="first_name">First</string>
-    <string name="last_name">Last</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
     <string name="address">Pickup Address</string>
     <string name="requestPickup">Request Pickup</string>
     <string name="number_of_donations">Number of Bags</string>
     <string name="location_description">Give a description of your location...</string>
     <string name="submit">Submit Request</string>
     <string name="requestReceipts">Requested Receipts:</string>
+    <string name="first_name_label">First name:</string>
+    <string name="last_name_label">Last name:</string>
+    <string name="created_on">Created on %1$s</string>
+    <string name="bag_request_label">Requested bags:</string>
+    <string name="location_description_label">Location description:</string>
 </resources>
