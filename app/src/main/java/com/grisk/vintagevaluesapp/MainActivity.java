@@ -1,12 +1,10 @@
 package com.grisk.vintagevaluesapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,12 +45,13 @@ public class MainActivity extends AppCompatActivity {
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
-        // Check if user is signed in (non-null) and update UI accordingly.
+        // Automatically login user
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
 
     }
 
+    // Updates the UI when the user is logged in and logged out
     private void updateUI(FirebaseUser currentUser) {
         if (currentUser != null) {
             mLoggedOutGroup.setVisibility(View.GONE);
@@ -64,11 +63,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // Signs user out
     public void signOut(View view) {
         mAuth.signOut();
         updateUI(null);
     }
 
+    // If the email and password text boxs are filled correctly, this returns true
     private boolean validateForm() {
         boolean valid = true;
 
@@ -91,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
         return valid;
     }
 
-
+    // Signs user in
     public void signIn(View view) {
         if (!validateForm()) {
             return;
@@ -122,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
+    // Creates an account and signs in
     public void createAccount(View view) {
         if (!validateForm()) {
             return;
@@ -151,4 +153,9 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    public void launchRequestPickup(View view) {
+        startActivity(new Intent(this, RequestPickup.class));
+    }
+
 }
