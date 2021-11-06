@@ -9,7 +9,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.grisk.vintagevaluesapp.MainActivity"
+        <activity
+            android:name=".RequestDetailActivity"
+            android:exported="false"
+            android:label="@string/request_detail_activity_name">
+        </activity>
+
+        <activity
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -17,8 +24,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RequestPickup"
-            android:exported="false">
+
+        <activity
+            android:name=".RequestPickup"
+            android:exported="false"
+            android:label="@string/request_pickup_activity_name">
+
         </activity>
     </application>
 

@@ -1,6 +1,7 @@
 package com.grisk.vintagevaluesapp;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -13,40 +14,66 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RequestPickup extends AppCompatActivity {
 
     private static final String REQUESTS = "requests";
+    private static final String USERREQUESTS = "user_requests";
     private static final String TAG = "DisplayActivity";
 
+    private FirebaseAuth mAuth;
     private FirebaseFirestore mDb = FirebaseFirestore.getInstance();
     private RequestRecyclerAdapter mAdapter;
+    private FirebaseUser currentUser;
 
-    private EditText firstName;
-    private EditText lastName;
-    private EditText bags;
-    private EditText locationDescription;
+    private EditText eFirstName;
+    private EditText eLastName;
+    private EditText eBags;
+    private EditText eLocationDescription;
+
+    private String sFirstName;
+    private String sLastName;
+    private String sBags;
+    private String sLocationDescription;
+    private int iBags;
+
+    private String Uid;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_pickup);
 
-        firstName = findViewById(R.id.firstNameEditText);
-        lastName = findViewById(R.id.lastNameEditText);
-        bags = findViewById(R.id.bagsEditText);
-        locationDescription = findViewById(R.id.locationDescription);
+        eFirstName = findViewById(R.id.firstNameEditText);
+        eLastName = findViewById(R.id.lastNameEditText);
+        eBags = findViewById(R.id.bagsEditText);
+        eLocationDescription = findViewById(R.id.locationDescription);
+
 
         // Recycler View
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
+
+        // Firebase Authentication
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+        Uid = currentUser.getUid();
 
         // Firestore Database
         Query query = mDb.collection(REQUESTS)
@@ -54,6 +81,7 @@ public class RequestPickup extends AppCompatActivity {
         FirestoreRecyclerOptions<Request> options = new FirestoreRecyclerOptions.Builder<Request>()
                 .setQuery(query, Request.class)
                 .build();
+
 
         // Setup recycler listener
         mAdapter = new RequestRecyclerAdapter(options, new RequestRecyclerAdapter.OnItemClickListener() {
@@ -88,30 +116,96 @@ public class RequestPickup extends AppCompatActivity {
             mAdapter.stopListening();
         }
     }
-//t
-    public void addUser(View v) {
-        String first = firstName.getText().toString();
-        String last = lastName.getText().toString();
-        String bags = this.bags.getText().toString();
-        String description = locationDescription.getText().toString();
 
-        Request newRequest = new Request(first, last, bags, new Date(), description);
+    // If the text fields are filled correctly, this returns true
+    private boolean validateForm() {
+        boolean valid = true;
 
-        Toast.makeText(this, "Adding " + first + " " + last, Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(sFirstName)) {
+            eFirstName.setError("Required");
+            valid = false;
+        } else {
+            eFirstName.setError(null);
+        }
+
+        if (TextUtils.isEmpty(sLastName)) {
+            eLastName.setError("Required");
+            valid = false;
+        } else {
+            eLastName.setError(null);
+        }
+
+        if (TextUtils.isEmpty(sBags)) {
+            eBags.setError("Please Enter Number of Donation Bags");
+            valid = false;
+        }
+        else if(iBags > 10 || iBags < 1){
+            eBags.setError("Bags Must Be Greater Than 0 And Less Than 10");
+            valid = false;
+        }
+        else {
+            eBags.setError(null);
+        }
+
+        if (TextUtils.isEmpty(sLocationDescription)) {
+            eLocationDescription.setError("Please Enter Description");
+            valid = false;
+        } else {
+            eLocationDescription.setError(null);
+        }
+
+        return valid;
+    }
+
+    public void addRequest(View v) {
+
+        sFirstName = eFirstName.getText().toString();
+        sLastName = eLastName.getText().toString();
+        sBags = eBags.getText().toString();
+        sLocationDescription = eLocationDescription.getText().toString();
+        iBags = Integer.parseInt(sBags);
+
+
+        if (!validateForm()) {
+            return;
+        }
+
+        Request newRequest = new Request(sFirstName, sLastName, sBags, new Date(), sLocationDescription);
+
+        Toast.makeText(this, "Adding " + sFirstName + " " + sLastName, Toast.LENGTH_SHORT).show();
+//        mDb.collection(REQUESTS)
+//                .add(newRequest)
+//                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+//                    @Override
+//                    public void onSuccess(DocumentReference documentReference) {
+//                        Log.d(TAG, "User added with ID: " + documentReference.getId());
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Log.w(TAG, "Error adding user", e);
+//                    }
+//                });
+
+        Log.d(TAG, Uid);
+
         mDb.collection(REQUESTS)
-                .add(newRequest)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                .document(Uid)
+                .set(newRequest)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "User added with ID: " + documentReference.getId());
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding user", e);
+                        Log.w(TAG, "Error writing document", e);
                     }
-                });
+                });;
+
     }
 
 }

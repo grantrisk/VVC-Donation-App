@@ -11,7 +11,7 @@
     <string name="last_name">Last Name</string>
     <string name="address">Pickup Address</string>
     <string name="requestPickup">Request Pickup</string>
-    <string name="number_of_donations">Number of Bags</string>
+    <string name="number_of_donations">Number of Bags Donating</string>
     <string name="location_description">Give a description of your location...</string>
     <string name="submit">Submit Request</string>
     <string name="requestReceipts">Requested Receipts:</string>
@@ -20,4 +20,6 @@
     <string name="created_on">Created on %1$s</string>
     <string name="bag_request_label">Requested bags:</string>
     <string name="location_description_label">Location description:</string>
+    <string name="request_pickup_activity_name">Request Pickup</string>
+    <string name="request_detail_activity_name">Request Detail</string>
 </resources>
