@@ -105,6 +105,8 @@ public class RequestPickup extends AppCompatActivity {
 
         // Update recycler with any data from Firestore
         recyclerView.setAdapter(mAdapter);
+        // This prevents the app from crashing when returning to this activity
+        recyclerView.setItemAnimator(null);
 
     }
 

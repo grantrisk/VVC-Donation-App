@@ -50,7 +50,9 @@ public class RequestDetailActivity extends AppCompatActivity {
                 request = documentSnapshot.toObject(Request.class);
                 Log.d("Test", request.getFirst());
 
-                name.setText(request.getFirst());
+                String fullName = request.getFirst() + " " + request.getLast();
+
+                name.setText(fullName);
                 bags.setText(request.getBags());
                 description.setText(request.getPickupDescription());
                 timeStamp.setText(format.format(request.getCreatedTime()));
