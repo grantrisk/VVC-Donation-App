@@ -1,6 +1,8 @@
 package com.grisk.vintagevaluesapp;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -32,7 +34,7 @@ import java.util.Map;
 
 public class RequestPickup extends AppCompatActivity {
 
-    private static final String REQUESTS = "requests";
+    public static final String REQUESTS = "requests";
     private static final String USERREQUESTS = "user_requests";
     private static final String TAG = "DisplayActivity";
 
@@ -89,11 +91,14 @@ public class RequestPickup extends AppCompatActivity {
             public void onItemClick(int position) {
                 // position can be -1 if the user clicks repeatedly super fast.
                 if(position >= 0) {
-                    Request request = mAdapter.getSnapshots().getSnapshot(position).toObject(Request.class);
                     String id = mAdapter.getSnapshots().getSnapshot(position).getId();
-                    mDb.collection(REQUESTS).document(id).delete();
 
-                    Toast.makeText(getApplicationContext(), "Deleting " + request.getFirst(), Toast.LENGTH_SHORT).show();
+                    // Gets document id
+                    String docID = mDb.collection(REQUESTS).document(id).getId();
+
+                    Intent intent = new Intent(getBaseContext(), RequestDetailActivity.class);
+                    intent.putExtra(RequestDetailActivity.DOCID, docID);
+                    startActivity(intent);
                 }
             }
         });
@@ -157,6 +162,7 @@ public class RequestPickup extends AppCompatActivity {
         return valid;
     }
 
+    // this updates the users request receipt only, not other users
     public void addRequest(View v) {
 
         sFirstName = eFirstName.getText().toString();
@@ -172,21 +178,7 @@ public class RequestPickup extends AppCompatActivity {
 
         Request newRequest = new Request(sFirstName, sLastName, sBags, new Date(), sLocationDescription);
 
-        Toast.makeText(this, "Adding " + sFirstName + " " + sLastName, Toast.LENGTH_SHORT).show();
-//        mDb.collection(REQUESTS)
-//                .add(newRequest)
-//                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-//                    @Override
-//                    public void onSuccess(DocumentReference documentReference) {
-//                        Log.d(TAG, "User added with ID: " + documentReference.getId());
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Log.w(TAG, "Error adding user", e);
-//                    }
-//                });
+        Toast.makeText(this, "Updating " + sFirstName + " " + sLastName, Toast.LENGTH_SHORT).show();
 
         Log.d(TAG, Uid);
 
