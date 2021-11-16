@@ -32,7 +32,7 @@ import java.util.Map;
 
 public class RequestPickup extends AppCompatActivity {
 
-    private static final String REQUESTS = "requests";
+    public static final String REQUESTS = "requests";
     private static final String USERREQUESTS = "user_requests";
     private static final String TAG = "DisplayActivity";
 
