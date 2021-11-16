@@ -22,4 +22,8 @@
     <string name="location_description_label">Location description:</string>
     <string name="request_pickup_activity_name">Request Pickup</string>
     <string name="request_detail_activity_name">Request Detail</string>
+    <string name="names_label">Name:</string>
+    <string name="num_bags_donating">Number of bags donating:</string>
+    <string name="location_description_title">Location specified:</string>
+    <string name="requested_on">Requested on:</string>
 </resources>
