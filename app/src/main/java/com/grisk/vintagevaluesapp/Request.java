@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class Request {
 
+    private String Uid;
     private String first;
     private String last;
     private String bags;
@@ -12,13 +13,16 @@ public class Request {
 
     public Request() {}
 
-    public Request(String first, String last, String bags, Date createdTime, String pickupDescription){
+    public Request(String Uid, String first, String last, String bags, Date createdTime, String pickupDescription){
+        this.Uid = Uid;
         this.first = first;
         this.last = last;
         this.bags = bags;
         this.createdTime = createdTime;
         this.pickupDescription = pickupDescription;
     }
+
+    public String getUid() {return  Uid;}
 
     public String getFirst() {return first;}
 

@@ -75,9 +75,10 @@ public class RequestPickup extends AppCompatActivity {
         currentUser = mAuth.getCurrentUser();
         Uid = currentUser.getUid();
 
-        // Firestore Database
+        // Firestore Database sorts data by Uid (if the Uid matches the Uid in Firestore then it will display
         Query query = mDb.collection(REQUESTS)
-                .orderBy("createdTime", Query.Direction.ASCENDING);
+                .whereEqualTo("uid", Uid);
+//                .orderBy("createdTime", Query.Direction.ASCENDING);
         FirestoreRecyclerOptions<Request> options = new FirestoreRecyclerOptions.Builder<Request>()
                 .setQuery(query, Request.class)
                 .build();
@@ -121,6 +122,7 @@ public class RequestPickup extends AppCompatActivity {
     private boolean validateForm() {
         boolean valid = true;
 
+        // First Name
         if (TextUtils.isEmpty(sFirstName)) {
             eFirstName.setError("Required");
             valid = false;
@@ -128,6 +130,7 @@ public class RequestPickup extends AppCompatActivity {
             eFirstName.setError(null);
         }
 
+        // Last Name
         if (TextUtils.isEmpty(sLastName)) {
             eLastName.setError("Required");
             valid = false;
@@ -135,6 +138,25 @@ public class RequestPickup extends AppCompatActivity {
             eLastName.setError(null);
         }
 
+
+        // Location
+        if (TextUtils.isEmpty(sLocationDescription)) {
+            eLocationDescription.setError("Please Enter Description");
+            valid = false;
+        } else {
+            eLocationDescription.setError(null);
+        }
+
+        // Check to make sure there are ONLY numbers in this text entry, made last to allow for other errors to be present
+        try {
+            iBags = Integer.parseInt(sBags);
+        }
+        catch (NumberFormatException ex){
+            eBags.setError("Please Enter Only Numbers");
+            return false;
+        }
+
+        // Bags
         if (TextUtils.isEmpty(sBags)) {
             eBags.setError("Please Enter Number of Donation Bags");
             valid = false;
@@ -147,13 +169,6 @@ public class RequestPickup extends AppCompatActivity {
             eBags.setError(null);
         }
 
-        if (TextUtils.isEmpty(sLocationDescription)) {
-            eLocationDescription.setError("Please Enter Description");
-            valid = false;
-        } else {
-            eLocationDescription.setError(null);
-        }
-
         return valid;
     }
 
@@ -161,50 +176,49 @@ public class RequestPickup extends AppCompatActivity {
 
         sFirstName = eFirstName.getText().toString();
         sLastName = eLastName.getText().toString();
-        sBags = eBags.getText().toString();
         sLocationDescription = eLocationDescription.getText().toString();
-        iBags = Integer.parseInt(sBags);
-
+        sBags = eBags.getText().toString();
 
         if (!validateForm()) {
             return;
         }
 
-        Request newRequest = new Request(sFirstName, sLastName, sBags, new Date(), sLocationDescription);
 
-        Toast.makeText(this, "Adding " + sFirstName + " " + sLastName, Toast.LENGTH_SHORT).show();
-//        mDb.collection(REQUESTS)
-//                .add(newRequest)
-//                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-//                    @Override
-//                    public void onSuccess(DocumentReference documentReference) {
-//                        Log.d(TAG, "User added with ID: " + documentReference.getId());
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Log.w(TAG, "Error adding user", e);
-//                    }
-//                });
+        Request newRequest = new Request(Uid, sFirstName, sLastName, sBags, new Date(), sLocationDescription);
 
-        Log.d(TAG, Uid);
-
+        Toast.makeText(this, "Adding " + sFirstName + " " + sLastName + ", Uid: " + Uid , Toast.LENGTH_LONG).show();
         mDb.collection(REQUESTS)
-                .document(Uid)
-                .set(newRequest)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                .add(newRequest)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "User added with ID: " + documentReference.getId());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error writing document", e);
+                        Log.w(TAG, "Error adding user", e);
                     }
-                });;
+                });
+
+
+        // This code overrides existing receipts
+//        mDb.collection(REQUESTS)
+//                .document(Uid)
+//                .set(newRequest)
+//                .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                    @Override
+//                    public void onSuccess(Void aVoid) {
+//                        Log.d(TAG, "DocumentSnapshot successfully written!");
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Log.w(TAG, "Error writing document", e);
+//                    }
+//                });;
 
     }
 
