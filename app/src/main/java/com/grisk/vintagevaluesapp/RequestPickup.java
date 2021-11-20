@@ -91,15 +91,17 @@ public class RequestPickup extends AppCompatActivity {
             public void onItemClick(int position) {
                 // position can be -1 if the user clicks repeatedly super fast.
                 if(position >= 0) {
-                    Request request = mAdapter.getSnapshots().getSnapshot(position).toObject(Request.class);
                     String id = mAdapter.getSnapshots().getSnapshot(position).getId();
 
+                    // Deletes old receipts when clicked
+//                    Request request = mAdapter.getSnapshots().getSnapshot(position).toObject(Request.class);
 //                    mDb.collection(REQUESTS).document(id).delete();
 //                    Toast.makeText(getApplicationContext(), "Deleting " + request.getFirst(), Toast.LENGTH_SHORT).show();
 
                     // Gets document id
                     String docID = mDb.collection(REQUESTS).document(id).getId();
 
+                    // Launch RequestDetailActivity when clicking card
                     Intent intent = new Intent(getBaseContext(), RequestDetailActivity.class);
                     intent.putExtra(RequestDetailActivity.DOCID, docID);
                     startActivity(intent);
@@ -110,7 +112,7 @@ public class RequestPickup extends AppCompatActivity {
         // Update recycler with any data from Firestore
         recyclerView.setAdapter(mAdapter);
 
-        // This prevents the app from crashing when returning to this activity
+        // This prevents the app from crashing when returning to this activity from RequestDetailActivity
         recyclerView.setItemAnimator(null);
 
     }

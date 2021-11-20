@@ -26,4 +26,6 @@
     <string name="num_bags_donating">Number of bags donating:</string>
     <string name="location_description_title">Location specified:</string>
     <string name="requested_on">Requested on:</string>
+    <string name="edit_requests_button">Edit Request</string>
+    <string name="save_edits_button">Save Edits</string>
 </resources>

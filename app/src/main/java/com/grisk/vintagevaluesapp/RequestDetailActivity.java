@@ -3,9 +3,11 @@ package com.grisk.vintagevaluesapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
@@ -28,16 +30,27 @@ public class RequestDetailActivity extends AppCompatActivity {
     private TextView description;
     private TextView timeStamp;
 
+    private boolean editReceiptButton;
+    private ConstraintLayout mEditGroup;
+    private ConstraintLayout mNotEditGroup;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_detail);
 
+        // Initialize the edit button to false (not in edit mode)
+        editReceiptButton = false;
+        mEditGroup = findViewById(R.id.edit_group);
+        mNotEditGroup = findViewById(R.id.not_edit_group);
+        mEditGroup.setVisibility(View.GONE);
+        mNotEditGroup.setVisibility(View.VISIBLE);
 
-        name = findViewById(R.id.name_label_items);
-        bags = findViewById(R.id.bags_label_items);
-        description = findViewById(R.id.location_description_label_items);
-        timeStamp = findViewById(R.id.time_stamp_label_item);
+        name = findViewById(R.id.no_name_label_items);
+        bags = findViewById(R.id.no_bags_label_items);
+        description = findViewById(R.id.no_location_description_label_items);
+        timeStamp = findViewById(R.id.no_time_stamp_label_item);
 
 
         Intent intent = getIntent();
@@ -60,4 +73,19 @@ public class RequestDetailActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void editRequest(View view){
+
+        // Updates the UI when the user wants to edit their receipt
+        if (editReceiptButton) {
+            mEditGroup.setVisibility(View.GONE);
+            mNotEditGroup.setVisibility(View.VISIBLE);
+            editReceiptButton = false;
+        } else {
+            mNotEditGroup.setVisibility(View.GONE);
+            mEditGroup.setVisibility(View.VISIBLE);
+            editReceiptButton = true;
+        }
+    }
+
 }

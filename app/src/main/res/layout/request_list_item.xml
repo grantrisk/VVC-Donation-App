@@ -78,7 +78,7 @@
 
 
         <TextView
-            android:id="@+id/location_description_label"
+            android:id="@+id/no_location_description_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/location_description_label"
@@ -91,8 +91,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            app:layout_constraintStart_toEndOf="@+id/location_description_label"
-            app:layout_constraintTop_toTopOf="@+id/location_description_label"/>
+            app:layout_constraintStart_toEndOf="@+id/no_location_description_label"
+            app:layout_constraintTop_toTopOf="@+id/no_location_description_label"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
