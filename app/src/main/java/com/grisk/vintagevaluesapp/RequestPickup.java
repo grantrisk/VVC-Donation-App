@@ -1,5 +1,6 @@
 package com.grisk.vintagevaluesapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -78,13 +79,13 @@ public class RequestPickup extends AppCompatActivity {
         // Firestore Database sorts data by Uid (if the Uid matches the Uid in Firestore then it will display
         Query query = mDb.collection(REQUESTS)
                 .whereEqualTo("uid", Uid);
-//                .orderBy("createdTime", Query.Direction.ASCENDING);
         FirestoreRecyclerOptions<Request> options = new FirestoreRecyclerOptions.Builder<Request>()
                 .setQuery(query, Request.class)
                 .build();
 
 
         // Setup recycler listener
+        // Allow for deletion
         mAdapter = new RequestRecyclerAdapter(options, new RequestRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
@@ -92,15 +93,25 @@ public class RequestPickup extends AppCompatActivity {
                 if(position >= 0) {
                     Request request = mAdapter.getSnapshots().getSnapshot(position).toObject(Request.class);
                     String id = mAdapter.getSnapshots().getSnapshot(position).getId();
-                    mDb.collection(REQUESTS).document(id).delete();
 
-                    Toast.makeText(getApplicationContext(), "Deleting " + request.getFirst(), Toast.LENGTH_SHORT).show();
+//                    mDb.collection(REQUESTS).document(id).delete();
+//                    Toast.makeText(getApplicationContext(), "Deleting " + request.getFirst(), Toast.LENGTH_SHORT).show();
+
+                    // Gets document id
+                    String docID = mDb.collection(REQUESTS).document(id).getId();
+
+                    Intent intent = new Intent(getBaseContext(), RequestDetailActivity.class);
+                    intent.putExtra(RequestDetailActivity.DOCID, docID);
+                    startActivity(intent);
                 }
             }
         });
 
         // Update recycler with any data from Firestore
         recyclerView.setAdapter(mAdapter);
+
+        // This prevents the app from crashing when returning to this activity
+        recyclerView.setItemAnimator(null);
 
     }
 
