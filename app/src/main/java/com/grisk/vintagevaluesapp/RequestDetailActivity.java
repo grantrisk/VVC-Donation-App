@@ -47,10 +47,10 @@ public class RequestDetailActivity extends AppCompatActivity {
         mEditGroup.setVisibility(View.GONE);
         mNotEditGroup.setVisibility(View.VISIBLE);
 
-        name = findViewById(R.id.no_name_label_items);
-        bags = findViewById(R.id.no_bags_label_items);
-        description = findViewById(R.id.no_location_description_label_items);
-        timeStamp = findViewById(R.id.no_time_stamp_label_item);
+        name = findViewById(R.id.not_name_label_items);
+        bags = findViewById(R.id.not_bags_label_items);
+        description = findViewById(R.id.not_location_description_label_items);
+        timeStamp = findViewById(R.id.not_time_stamp_label_item);
 
 
         Intent intent = getIntent();
@@ -73,7 +73,15 @@ public class RequestDetailActivity extends AppCompatActivity {
             }
         });
     }
+/*
+    TODO:
+    -add edit text to editing constraint layout
+    -fill in edit text when editing from old input
+    -add valid form
+    -once validated, "put" to firestore
+    -make sure it is writing over that request document
 
+*/
     public void editRequest(View view){
 
         // Updates the UI when the user wants to edit their receipt
