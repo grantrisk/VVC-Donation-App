@@ -34,7 +34,6 @@ import java.util.Map;
 public class RequestPickup extends AppCompatActivity {
 
     public static final String REQUESTS = "requests";
-    private static final String USERREQUESTS = "user_requests";
     private static final String TAG = "DisplayActivity";
 
     private FirebaseAuth mAuth;
@@ -214,24 +213,6 @@ public class RequestPickup extends AppCompatActivity {
                         Log.w(TAG, "Error adding user", e);
                     }
                 });
-
-
-        // This code overrides existing receipts
-//        mDb.collection(REQUESTS)
-//                .document(Uid)
-//                .set(newRequest)
-//                .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                    @Override
-//                    public void onSuccess(Void aVoid) {
-//                        Log.d(TAG, "DocumentSnapshot successfully written!");
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Log.w(TAG, "Error writing document", e);
-//                    }
-//                });;
 
     }
 

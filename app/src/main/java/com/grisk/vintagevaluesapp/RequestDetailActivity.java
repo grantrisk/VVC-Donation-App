@@ -7,10 +7,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -50,8 +53,6 @@ public class RequestDetailActivity extends AppCompatActivity {
         mNotEditGroup.setVisibility(View.VISIBLE);
 
 
-
-
         name = findViewById(R.id.not_name_label_items);
         bags = findViewById(R.id.not_bags_label_items);
         description = findViewById(R.id.not_location_description_label_items);
@@ -66,11 +67,10 @@ public class RequestDetailActivity extends AppCompatActivity {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 request = documentSnapshot.toObject(Request.class);
-                Log.d("Test", request.getFirst());
 
                 String fullName = request.getFirst() + " " + request.getLast();
-
                 name.setText(fullName);
+
                 bags.setText(request.getBags());
                 description.setText(request.getPickupDescription());
                 timeStamp.setText(format.format(request.getCreatedTime()));
@@ -82,7 +82,6 @@ public class RequestDetailActivity extends AppCompatActivity {
             }
         });
 
-
     }
 
     // Edit request button to activate editing the request receipt
@@ -90,32 +89,52 @@ public class RequestDetailActivity extends AppCompatActivity {
 
         // Updates the UI when the user wants to edit their receipt
         if (editReceiptButton) {
+            // Gets called second to validate form, write data, and save changes
 
+            // Make sure edittext fields are valid and remove any unnecessary white space in name
             if (!validateForm()) {
                 return;
             }
 
-            // Gets called second to save changes
+            // Write new data to DB
+            DocumentReference docReference = mDb.collection(RequestPickup.REQUESTS).document(docID);
+            docReference.update(
+                    "bags", bagsValue,
+                    "pickupDescription", locationValue,
+                    "first", firstNameValue,
+                    "last", lastNameValue
+                    );
+
+            // Store new data in text fields
+            name.setText(firstNameValue + " " + lastNameValue);
+            bags.setText(bagsValue);
+            description.setText(locationValue);
+
+            // Switching view back to normal display
             editReceiptButton = false;
             mEditGroup.setVisibility(View.GONE);
             mNotEditGroup.setVisibility(View.VISIBLE);
 
         } else {
-            // Gets called first to switch into edit mode
+
+            // Gets called first to switch into edit mode (edit display)
             editReceiptButton = true;
             mNotEditGroup.setVisibility(View.GONE);
             populateEditFields();
             mEditGroup.setVisibility(View.VISIBLE);
+
         }
     }
 
 
-
-    String nameValue;
+    // String of values in DB
+    String firstNameValue;
+    String lastNameValue;
     String bagsValue;
     String locationValue;
 
-    EditText nameSet;
+    EditText firstNameSet;
+    EditText lastNameSet;
     EditText bagsSet;
     EditText locationSet;
 
@@ -124,13 +143,19 @@ public class RequestDetailActivity extends AppCompatActivity {
 
     private void populateEditFields() {
         // Pull values from text fields
-        nameValue = name.getText().toString();
+        String nameValue = name.getText().toString();
+        String[] split = nameValue.split(" ");
+        firstNameValue = split[0];
+        lastNameValue = split[1];
+
         bagsValue = bags.getText().toString();
         locationValue = description.getText().toString();
 
         // Set those text values to the edit text fields
-        nameSet = findViewById(R.id.yes_name_label_items);
-        nameSet.setText(nameValue);
+        firstNameSet = findViewById(R.id.yes_name_label_items);
+        firstNameSet.setText(firstNameValue);
+        lastNameSet = findViewById(R.id.yes_last_name_label_items);
+        lastNameSet.setText(lastNameValue);
 
         bagsSet = findViewById(R.id.yes_bags_label_items);
         bagsSet.setText(bagsValue);
@@ -143,17 +168,28 @@ public class RequestDetailActivity extends AppCompatActivity {
     private boolean validateForm() {
         boolean valid = true;
 
-        nameValue = nameSet.getText().toString();
+        firstNameValue = firstNameSet.getText().toString().trim();
+        lastNameValue = lastNameSet.getText().toString().trim();
         bagsValue = bagsSet.getText().toString();
         locationValue = locationSet.getText().toString();
 
 
-        // Name
-        if (TextUtils.isEmpty(nameValue)) {
-            nameSet.setError("Required");
+        // First Name
+        if (TextUtils.isEmpty(firstNameValue)) {
+            firstNameSet.setError("Required");
             valid = false;
         } else {
-            nameSet.setError(null);
+            firstNameSet.setError(null);
+            firstNameValue.trim();
+        }
+
+        // Last Name
+        if (TextUtils.isEmpty(lastNameValue)) {
+            lastNameSet.setError("Required");
+            valid = false;
+        } else {
+            lastNameSet.setError(null);
+            lastNameValue.trim();
         }
 
 
@@ -193,10 +229,8 @@ public class RequestDetailActivity extends AppCompatActivity {
 }
     /*
         TODO:
-(DONE)        -change text fields to edit fields
-(DONE)        -fill in edit text when editing from old input
-(DONE)        -add valid form
         -once validated, "put" to Firestore
+        -update old text fields
         -make sure it is writing over that request document
         -save edit text fields when rotating screen
 

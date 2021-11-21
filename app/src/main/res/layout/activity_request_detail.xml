@@ -121,7 +121,7 @@
             android:id="@+id/yes_name_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/names_label"
+            android:text="@string/first_names_label"
             android:textStyle="bold"
             android:layout_marginLeft="40dp"
             android:layout_marginTop="20dp"
@@ -139,14 +139,34 @@
             app:layout_constraintBottom_toBottomOf="@id/yes_name_label"/>
 
         <TextView
+            android:id="@+id/yes_last_name_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/last_names_label"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            app:layout_constraintLeft_toLeftOf="@id/yes_name_label"
+            app:layout_constraintTop_toBottomOf="@id/yes_name_label"/>
+
+        <EditText
+            android:id="@+id/yes_last_name_label_items"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:ems="12"
+            app:layout_constraintLeft_toRightOf="@+id/yes_last_name_label"
+            app:layout_constraintTop_toTopOf="@id/yes_last_name_label"
+            app:layout_constraintBottom_toBottomOf="@id/yes_last_name_label"/>
+
+        <TextView
             android:id="@+id/yes_bags_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/num_bags_donating"
             android:textStyle="bold"
             android:layout_marginTop="20dp"
-            app:layout_constraintLeft_toLeftOf="@+id/yes_name_label"
-            app:layout_constraintTop_toBottomOf="@+id/yes_name_label"/>
+            app:layout_constraintLeft_toLeftOf="@+id/yes_last_name_label"
+            app:layout_constraintTop_toBottomOf="@+id/yes_last_name_label"/>
 
         <EditText
             android:id="@+id/yes_bags_label_items"
