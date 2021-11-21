@@ -124,16 +124,19 @@
             android:text="@string/names_label"
             android:textStyle="bold"
             android:layout_marginLeft="40dp"
+            android:layout_marginTop="20dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/yes_edit_button"/>
 
-        <TextView
+        <EditText
             android:id="@+id/yes_name_label_items"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
+            android:ems="12"
             app:layout_constraintLeft_toRightOf="@+id/yes_name_label"
-            app:layout_constraintTop_toTopOf="@id/yes_name_label" />
+            app:layout_constraintTop_toTopOf="@id/yes_name_label"
+            app:layout_constraintBottom_toBottomOf="@id/yes_name_label"/>
 
         <TextView
             android:id="@+id/yes_bags_label"
@@ -145,13 +148,15 @@
             app:layout_constraintLeft_toLeftOf="@+id/yes_name_label"
             app:layout_constraintTop_toBottomOf="@+id/yes_name_label"/>
 
-        <TextView
+        <EditText
             android:id="@+id/yes_bags_label_items"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
+            android:inputType="number"
             app:layout_constraintLeft_toRightOf="@+id/yes_bags_label"
-            app:layout_constraintTop_toTopOf="@+id/yes_bags_label"/>
+            app:layout_constraintTop_toTopOf="@+id/yes_bags_label"
+            app:layout_constraintBottom_toBottomOf="@id/yes_bags_label"/>
 
         <TextView
             android:id="@+id/yes_location_description_label"
@@ -163,11 +168,13 @@
             app:layout_constraintLeft_toLeftOf="@+id/yes_bags_label"
             app:layout_constraintTop_toBottomOf="@+id/yes_bags_label"/>
 
-        <TextView
+        <EditText
             android:id="@+id/yes_location_description_label_items"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
             app:layout_constraintLeft_toLeftOf="@+id/yes_location_description_label"
             app:layout_constraintTop_toBottomOf="@+id/yes_location_description_label"/>
 
@@ -176,9 +183,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:layout_marginStart="40dp"
             android:text="@string/requested_on"
             android:textStyle="bold"
-            app:layout_constraintLeft_toLeftOf="@+id/yes_location_description_label_items"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/yes_location_description_label_items"/>
 
         <TextView
