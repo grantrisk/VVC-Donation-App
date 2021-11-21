@@ -115,6 +115,9 @@ public class RequestDetailActivity extends AppCompatActivity {
             mEditGroup.setVisibility(View.GONE);
             mNotEditGroup.setVisibility(View.VISIBLE);
 
+            // Display Toast
+            Toast.makeText(getApplicationContext(), "Saving Changes", Toast.LENGTH_SHORT).show();
+
         } else {
 
             // Gets called first to switch into edit mode (edit display)
@@ -229,9 +232,6 @@ public class RequestDetailActivity extends AppCompatActivity {
 }
     /*
         TODO:
-        -once validated, "put" to Firestore
-        -update old text fields
-        -make sure it is writing over that request document
         -save edit text fields when rotating screen
 
     */
