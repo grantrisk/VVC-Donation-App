@@ -3,7 +3,6 @@ package com.grisk.vintagevaluesapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -45,8 +44,8 @@ public class RequestDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_detail);
 
+
         // Initialize the edit button to false (not in edit mode)
-        editReceiptButton = false;
         mEditGroup = findViewById(R.id.edit_group);
         mNotEditGroup = findViewById(R.id.not_edit_group);
         mEditGroup.setVisibility(View.GONE);
@@ -84,8 +83,9 @@ public class RequestDetailActivity extends AppCompatActivity {
 
     }
 
-    // Edit request button to activate editing the request receipt
-    public void editRequest(View view){
+
+    // Edit request button used to activate editing the request receipt
+    public void editRequest(View view) {
 
         // Updates the UI when the user wants to edit their receipt
         if (editReceiptButton) {
@@ -103,7 +103,17 @@ public class RequestDetailActivity extends AppCompatActivity {
                     "pickupDescription", locationValue,
                     "first", firstNameValue,
                     "last", lastNameValue
-                    );
+            ).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void unused) {
+                    Toast.makeText(getApplicationContext(), "Saved Changes", Toast.LENGTH_SHORT).show();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(getApplicationContext(), "Changes were not saved. Retry later.", Toast.LENGTH_SHORT).show();
+                }
+            });
 
             // Store new data in text fields
             name.setText(firstNameValue + " " + lastNameValue);
@@ -115,8 +125,6 @@ public class RequestDetailActivity extends AppCompatActivity {
             mEditGroup.setVisibility(View.GONE);
             mNotEditGroup.setVisibility(View.VISIBLE);
 
-            // Display Toast
-            Toast.makeText(getApplicationContext(), "Saving Changes", Toast.LENGTH_SHORT).show();
 
         } else {
 
@@ -207,8 +215,7 @@ public class RequestDetailActivity extends AppCompatActivity {
         // Check to make sure there are ONLY numbers in this text entry, made last to allow for other errors to be present
         try {
             iBags = Integer.parseInt(bagsValue);
-        }
-        catch (NumberFormatException ex){
+        } catch (NumberFormatException ex) {
             bagsSet.setError("Please Enter Only Numbers");
             return false;
         }
@@ -217,12 +224,10 @@ public class RequestDetailActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(bagsValue)) {
             bagsSet.setError("Please Enter Number of Donation Bags");
             valid = false;
-        }
-        else if(iBags > 10 || iBags < 1){
+        } else if (iBags > 10 || iBags < 1) {
             bagsSet.setError("Bags Must Be Greater Than 0 And Less Than 10");
             valid = false;
-        }
-        else {
+        } else {
             bagsSet.setError(null);
         }
 

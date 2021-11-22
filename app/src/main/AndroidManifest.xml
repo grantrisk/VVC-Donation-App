@@ -11,6 +11,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".RequestDetailActivity"
+            android:screenOrientation="portrait"
             android:exported="false"
             android:label="@string/request_detail_activity_name">
         </activity>

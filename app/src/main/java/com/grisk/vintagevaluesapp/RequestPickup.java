@@ -15,21 +15,15 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 public class RequestPickup extends AppCompatActivity {
 
@@ -89,7 +83,7 @@ public class RequestPickup extends AppCompatActivity {
             @Override
             public void onItemClick(int position) {
                 // position can be -1 if the user clicks repeatedly super fast.
-                if(position >= 0) {
+                if (position >= 0) {
                     String id = mAdapter.getSnapshots().getSnapshot(position).getId();
 
                     // Deletes old receipts when clicked
@@ -162,8 +156,7 @@ public class RequestPickup extends AppCompatActivity {
         // Check to make sure there are ONLY numbers in this text entry, made last to allow for other errors to be present
         try {
             iBags = Integer.parseInt(sBags);
-        }
-        catch (NumberFormatException ex){
+        } catch (NumberFormatException ex) {
             eBags.setError("Please Enter Only Numbers");
             return false;
         }
@@ -172,12 +165,10 @@ public class RequestPickup extends AppCompatActivity {
         if (TextUtils.isEmpty(sBags)) {
             eBags.setError("Please Enter Number of Donation Bags");
             valid = false;
-        }
-        else if(iBags > 10 || iBags < 1){
+        } else if (iBags > 10 || iBags < 1) {
             eBags.setError("Bags Must Be Greater Than 0 And Less Than 10");
             valid = false;
-        }
-        else {
+        } else {
             eBags.setError(null);
         }
 
@@ -198,7 +189,7 @@ public class RequestPickup extends AppCompatActivity {
 
         Request newRequest = new Request(Uid, sFirstName, sLastName, sBags, new Date(), sLocationDescription);
 
-        Toast.makeText(this, "Adding " + sFirstName + " " + sLastName + ", Uid: " + Uid , Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Adding " + sFirstName + " " + sLastName + ", Uid: " + Uid, Toast.LENGTH_LONG).show();
         mDb.collection(REQUESTS)
                 .add(newRequest)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
