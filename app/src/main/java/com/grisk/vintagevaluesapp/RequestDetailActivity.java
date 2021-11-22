@@ -235,8 +235,3 @@ public class RequestDetailActivity extends AppCompatActivity {
     }
 
 }
-    /*
-        TODO:
-        -save edit text fields when rotating screen
-
-    */
