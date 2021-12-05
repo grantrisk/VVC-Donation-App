@@ -103,8 +103,6 @@ public class RequestDetailActivity extends AppCompatActivity {
                 });
 
         // Go back to previous page
-        startActivity(new Intent(this, RequestPickup.class));
-        // Make sure user won't be able to come back to this activity through the back button
         finish();
     }
 

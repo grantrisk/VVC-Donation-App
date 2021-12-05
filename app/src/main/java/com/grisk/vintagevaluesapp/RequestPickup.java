@@ -97,7 +97,7 @@ public class RequestPickup extends AppCompatActivity {
                     // Make sure user can't come back to another request activity, this makes sure when
                     // the user deletes a receipt that they don't return to old request pickup activity
                     // (they will return to the MainActivity)
-                    finish();
+                    //finish();
                 }
             }
         });
@@ -109,6 +109,7 @@ public class RequestPickup extends AppCompatActivity {
         recyclerView.setItemAnimator(null);
 
     }
+
 
     @Override
     protected void onStart() {
