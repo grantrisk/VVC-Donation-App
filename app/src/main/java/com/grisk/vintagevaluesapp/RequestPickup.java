@@ -176,6 +176,7 @@ public class RequestPickup extends AppCompatActivity {
         return valid;
     }
 
+
     public void addRequest(View v) {
 
         sFirstName = eFirstName.getText().toString();
@@ -190,21 +191,26 @@ public class RequestPickup extends AppCompatActivity {
 
         Request newRequest = new Request(Uid, sFirstName, sLastName, sBags, new Date(), sLocationDescription);
 
-        Toast.makeText(this, "Adding " + sFirstName + " " + sLastName, Toast.LENGTH_LONG).show();
         mDb.collection(REQUESTS)
                 .add(newRequest)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "User added with ID: " + documentReference.getId());
+                        Toast.makeText(getApplicationContext(), "Successfully adding " + sFirstName + " " + sLastName, Toast.LENGTH_LONG).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding user", e);
+                        Toast.makeText(getApplicationContext(), "Failed to add " + sFirstName + " " + sLastName, Toast.LENGTH_LONG).show();
                     }
                 });
+
+        // Clear out text fields
+        eFirstName.setText("");
+        eLastName.setText("");
+        eBags.setText("");
+        eLocationDescription.setText("");
 
     }
 
