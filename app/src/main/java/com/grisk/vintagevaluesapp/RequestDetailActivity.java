@@ -3,6 +3,7 @@ package com.grisk.vintagevaluesapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -81,6 +82,30 @@ public class RequestDetailActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void onDeleteRequest (View view){
+
+        // Delete the request receipt
+        mDb.collection(RequestPickup.REQUESTS).document(docID)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("TAG", "DocumentSnapshot successfully deleted!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("TAG", "Error deleting document", e);
+                    }
+                });
+
+        // Go back to previous page
+        startActivity(new Intent(this, RequestPickup.class));
+        // Make sure user won't be able to come back to this activity through the back button
+        finish();
     }
 
 

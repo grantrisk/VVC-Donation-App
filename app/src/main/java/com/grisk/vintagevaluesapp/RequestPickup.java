@@ -86,11 +86,6 @@ public class RequestPickup extends AppCompatActivity {
                 if (position >= 0) {
                     String id = mAdapter.getSnapshots().getSnapshot(position).getId();
 
-                    // Deletes old receipts when clicked
-//                    Request request = mAdapter.getSnapshots().getSnapshot(position).toObject(Request.class);
-//                    mDb.collection(REQUESTS).document(id).delete();
-//                    Toast.makeText(getApplicationContext(), "Deleting " + request.getFirst(), Toast.LENGTH_SHORT).show();
-
                     // Gets document id
                     String docID = mDb.collection(REQUESTS).document(id).getId();
 
@@ -98,6 +93,11 @@ public class RequestPickup extends AppCompatActivity {
                     Intent intent = new Intent(getBaseContext(), RequestDetailActivity.class);
                     intent.putExtra(RequestDetailActivity.DOCID, docID);
                     startActivity(intent);
+
+                    // Make sure user can't come back to another request activity, this makes sure when
+                    // the user deletes a receipt that they don't return to old request pickup activity
+                    // (they will return to the MainActivity)
+                    finish();
                 }
             }
         });
@@ -189,7 +189,7 @@ public class RequestPickup extends AppCompatActivity {
 
         Request newRequest = new Request(Uid, sFirstName, sLastName, sBags, new Date(), sLocationDescription);
 
-        Toast.makeText(this, "Adding " + sFirstName + " " + sLastName + ", Uid: " + Uid, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Adding " + sFirstName + " " + sLastName, Toast.LENGTH_LONG).show();
         mDb.collection(REQUESTS)
                 .add(newRequest)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {

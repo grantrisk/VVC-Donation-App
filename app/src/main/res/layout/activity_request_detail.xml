@@ -97,6 +97,15 @@
             app:layout_constraintLeft_toRightOf="@+id/not_time_stamp_label"
             app:layout_constraintTop_toTopOf="@+id/not_time_stamp_label"/>
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/red"
+            android:text="@string/delete_text"
+            android:onClick="onDeleteRequest"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -216,6 +225,15 @@
             android:layout_marginLeft="20dp"
             app:layout_constraintLeft_toRightOf="@+id/yes_time_stamp_label"
             app:layout_constraintTop_toTopOf="@+id/yes_time_stamp_label"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/red"
+            android:text="@string/delete_text"
+            android:onClick="onDeleteRequest"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
