@@ -31,4 +31,5 @@
     <string name="edit_requests_button">Edit Request</string>
     <string name="save_edits_button">Save Edits</string>
     <string name="delete_text">Delete</string>
+    <string name="fulfill_pick_up">Fulfill Pickup</string>
 </resources>

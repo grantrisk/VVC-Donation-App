@@ -154,8 +154,12 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    public void launchRequestPickup(View view) {
+    public void onRequestPickup(View view) {
         startActivity(new Intent(this, RequestPickup.class));
+    }
+
+    public void onRideSignUp (View view) {
+        startActivity(new Intent(this, FulfillPickup.class));
     }
 
 }

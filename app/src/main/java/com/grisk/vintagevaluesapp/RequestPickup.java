@@ -3,7 +3,6 @@ package com.grisk.vintagevaluesapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -61,7 +60,7 @@ public class RequestPickup extends AppCompatActivity {
 
 
         // Recycler View
-        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        RecyclerView recyclerView = findViewById(R.id.request_recycler_view);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
 
         // Firebase Authentication
@@ -78,7 +77,6 @@ public class RequestPickup extends AppCompatActivity {
 
 
         // Setup recycler listener
-        // Allow for deletion
         mAdapter = new RequestRecyclerAdapter(options, new RequestRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
@@ -94,10 +92,6 @@ public class RequestPickup extends AppCompatActivity {
                     intent.putExtra(RequestDetailActivity.DOCID, docID);
                     startActivity(intent);
 
-                    // Make sure user can't come back to another request activity, this makes sure when
-                    // the user deletes a receipt that they don't return to old request pickup activity
-                    // (they will return to the MainActivity)
-                    //finish();
                 }
             }
         });

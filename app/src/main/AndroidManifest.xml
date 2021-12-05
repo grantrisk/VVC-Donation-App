@@ -10,12 +10,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".FulfillPickupDetail"
+            android:exported="false" />
+        <activity
+            android:name=".FulfillPickup"
+            android:exported="false" />
+        <activity
             android:name=".RequestDetailActivity"
-            android:screenOrientation="portrait"
             android:exported="false"
-            android:label="@string/request_detail_activity_name">
-        </activity>
-
+            android:label="@string/request_detail_activity_name"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -25,13 +29,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".RequestPickup"
             android:exported="false"
-            android:label="@string/request_pickup_activity_name">
-
-        </activity>
+            android:label="@string/request_pickup_activity_name" />
     </application>
 
 </manifest>
