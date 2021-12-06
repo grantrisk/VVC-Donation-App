@@ -41,7 +41,8 @@ public class CurrentPickups extends AppCompatActivity {
         // Firestore Database sorts data by time stamp
         Query query = mDb.collection(REQUESTS)
                 .whereEqualTo("requestAccepted", true)
-                .whereEqualTo("pickupUid", Uid);
+                .whereEqualTo("pickupUid", Uid)
+                .whereEqualTo("requestCompleted", false);
         FirestoreRecyclerOptions<Request> options = new FirestoreRecyclerOptions.Builder<Request>()
                 .setQuery(query, Request.class)
                 .build();
@@ -60,7 +61,7 @@ public class CurrentPickups extends AppCompatActivity {
 
                     // Launch Popup activity when clicking card
                     Intent intent = new Intent(getBaseContext(), PopupMenu.class);
-                    intent.putExtra(FulfillPickupDetail.DOCID, docID);
+                    intent.putExtra(PopupMenu.DOCID, docID);
                     startActivity(intent);
 
                 }

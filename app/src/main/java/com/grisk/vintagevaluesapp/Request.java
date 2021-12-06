@@ -12,6 +12,7 @@ public class Request {
     private String pickupDescription;
     private Boolean requestAccepted = false;
     private String pickupUid = "";
+    private Boolean requestCompleted = false;
 
     public Request() {}
 
@@ -37,6 +38,8 @@ public class Request {
     public Date getCreatedTime() {return createdTime;}
 
     public Boolean getRequestAccepted() { return requestAccepted; }
+
+    public Boolean getRequestCompleted() { return requestCompleted; }
 
     public String getPickupUid() { return pickupUid; }
 }
