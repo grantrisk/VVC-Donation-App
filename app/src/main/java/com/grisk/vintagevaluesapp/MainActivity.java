@@ -162,4 +162,8 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(this, FulfillPickup.class));
     }
 
+    public void onCurrentPickups (View view) {
+        startActivity(new Intent(this, CurrentPickups.class));
+    }
+
 }

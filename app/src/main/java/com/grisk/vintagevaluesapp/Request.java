@@ -10,6 +10,8 @@ public class Request {
     private String bags;
     private Date createdTime;
     private String pickupDescription;
+    private Boolean requestAccepted = false;
+    private String pickupUid = "";
 
     public Request() {}
 
@@ -34,4 +36,7 @@ public class Request {
 
     public Date getCreatedTime() {return createdTime;}
 
+    public Boolean getRequestAccepted() { return requestAccepted; }
+
+    public String getPickupUid() { return pickupUid; }
 }

@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -14,35 +13,41 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
-public class FulfillPickup extends AppCompatActivity {
+public class CurrentPickups extends AppCompatActivity {
 
     public static final String REQUESTS = "requests";
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore mDb = FirebaseFirestore.getInstance();
     private RequestRecyclerAdapter mAdapter;
+    private FirebaseUser currentUser;
+    private String Uid;
+
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fulfill_pickup);
+        setContentView(R.layout.activity_current_pickups);
 
         // Recycler View
-        RecyclerView recyclerView = findViewById(R.id.fulfill_recycler_view);
+        RecyclerView recyclerView = findViewById(R.id.current_recycler_view);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
 
         // Firebase Authentication
         mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+        Uid = currentUser.getUid();
 
         // Firestore Database sorts data by time stamp
         Query query = mDb.collection(REQUESTS)
-                .whereEqualTo("requestAccepted", false)
-                .orderBy("createdTime", Query.Direction.ASCENDING);
+                .whereEqualTo("requestAccepted", true)
+                .whereEqualTo("pickupUid", Uid);
         FirestoreRecyclerOptions<Request> options = new FirestoreRecyclerOptions.Builder<Request>()
                 .setQuery(query, Request.class)
                 .build();
+
 
         // Setup recycler listener
         mAdapter = new RequestRecyclerAdapter(options, new RequestRecyclerAdapter.OnItemClickListener() {
@@ -55,10 +60,10 @@ public class FulfillPickup extends AppCompatActivity {
                     // Gets document id
                     String docID = mDb.collection(REQUESTS).document(id).getId();
 
-                    // Launch RequestDetailActivity when clicking card
-                    Intent intent = new Intent(getBaseContext(), FulfillPickupDetail.class);
-                    intent.putExtra(FulfillPickupDetail.DOCID, docID);
-                    startActivity(intent);
+//                    // Launch RequestDetailActivity when clicking card
+//                    Intent intent = new Intent(getBaseContext(), FulfillPickupDetail.class);
+//                    intent.putExtra(FulfillPickupDetail.DOCID, docID);
+//                    startActivity(intent);
 
                 }
             }
@@ -75,7 +80,6 @@ public class FulfillPickup extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         mAdapter.startListening();
-
     }
 
     @Override
