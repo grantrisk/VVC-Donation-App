@@ -13,4 +13,9 @@
         <item name="android:backgroundTint">@color/colorButton</item>
     </style>
 
+    <style name="AppTheme.PopupCustomTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+    </style>
+
 </resources>

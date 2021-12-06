@@ -10,6 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".PopupMenu"
+            android:exported="false"
+            android:theme="@style/AppTheme.PopupCustomTheme" />
+        <activity
             android:name=".CurrentPickups"
             android:exported="false" />
         <activity

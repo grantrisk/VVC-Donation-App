@@ -36,4 +36,5 @@
     <string name="accept_request">Do you want to accept this pickup request?</string>
     <string name="view_current_pickups">View Current Pickups</string>
     <string name="current_pickups">Current Pickups:</string>
+    <string name="pickup_conformation">Have you successfully picked up the donation?</string>
 </resources>

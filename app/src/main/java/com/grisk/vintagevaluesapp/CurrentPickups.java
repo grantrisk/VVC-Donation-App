@@ -1,11 +1,11 @@
 package com.grisk.vintagevaluesapp;
 
+import android.content.Intent;
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.Intent;
-import android.os.Bundle;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,8 +22,6 @@ public class CurrentPickups extends AppCompatActivity {
     private RequestRecyclerAdapter mAdapter;
     private FirebaseUser currentUser;
     private String Uid;
-
-
 
 
     @Override
@@ -60,10 +58,10 @@ public class CurrentPickups extends AppCompatActivity {
                     // Gets document id
                     String docID = mDb.collection(REQUESTS).document(id).getId();
 
-//                    // Launch RequestDetailActivity when clicking card
-//                    Intent intent = new Intent(getBaseContext(), FulfillPickupDetail.class);
-//                    intent.putExtra(FulfillPickupDetail.DOCID, docID);
-//                    startActivity(intent);
+                    // Launch Popup activity when clicking card
+                    Intent intent = new Intent(getBaseContext(), PopupMenu.class);
+                    intent.putExtra(FulfillPickupDetail.DOCID, docID);
+                    startActivity(intent);
 
                 }
             }
