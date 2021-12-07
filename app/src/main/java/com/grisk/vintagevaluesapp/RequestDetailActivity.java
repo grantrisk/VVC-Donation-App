@@ -45,6 +45,8 @@ public class RequestDetailActivity extends AppCompatActivity {
     private ConstraintLayout mEditGroup;
     private ConstraintLayout mNotEditGroup;
 
+    private String imageFileLocation;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +84,7 @@ public class RequestDetailActivity extends AppCompatActivity {
                 description.setText(request.getPickupDescription());
                 timeStamp.setText(format.format(request.getCreatedTime()));
 
-                String imageFileLocation = request.getImageFile();
+                imageFileLocation = request.getImageFile();
                 StorageReference image = mStorageRef.child(imageFileLocation);
 
                 // Glide is a 3rd party library that simplifies image downloading, caching,
@@ -103,21 +105,41 @@ public class RequestDetailActivity extends AppCompatActivity {
 
     public void onDeleteRequest (View view){
 
-        // Delete the request receipt
-        mDb.collection(RequestPickup.REQUESTS).document(docID)
-                .delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("TAG", "DocumentSnapshot successfully deleted!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("TAG", "Error deleting document", e);
-                    }
-                });
+
+        // Create a reference to the file and delete it
+        StorageReference reference = mStorageRef.child(imageFileLocation);
+        reference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+
+                // Delete the request receipt
+                mDb.collection(RequestPickup.REQUESTS).document(docID)
+                        .delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(RequestDetailActivity.this,
+                                        "Successfully deleted request receipt!",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(RequestDetailActivity.this,
+                                        "Failed to delete request receipt.",
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(RequestDetailActivity.this,
+                        "Failed to delete request receipt.",
+                        Toast.LENGTH_LONG).show();
+            }
+        });
 
         // Go back to previous page
         finish();
