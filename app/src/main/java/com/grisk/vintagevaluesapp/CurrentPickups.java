@@ -2,6 +2,7 @@ package com.grisk.vintagevaluesapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -22,6 +23,8 @@ public class CurrentPickups extends AppCompatActivity {
     private RequestRecyclerAdapter mAdapter;
     private FirebaseUser currentUser;
     private String Uid;
+
+    private long mLastClickTime = 0;
 
 
     @Override
@@ -53,6 +56,14 @@ public class CurrentPickups extends AppCompatActivity {
         mAdapter = new RequestRecyclerAdapter(options, new RequestRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
+                // Make sure user can't double click
+                // mis-clicking prevention, using threshold of 1000 ms
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+
+
                 // position can be -1 if the user clicks repeatedly super fast.
                 if (position >= 0) {
                     String id = mAdapter.getSnapshots().getSnapshot(position).getId();

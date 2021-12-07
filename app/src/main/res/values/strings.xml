@@ -46,4 +46,7 @@
     <string name="has_been_completed">Your request has been completed! Thank you for your donation!</string>
     <string name="has_been_accepted">Your request has been accepted! It will be picked up soon!</string>
     <string name="has_not_been_accepted">Your request has not been accepted yet.</string>
+    <string name="request_pickup_description">Want to make a donation? Request a pickup!</string>
+    <string name="fulfill_pickup_description">Want to pickup a donation for Vintage Values? Find a request here.</string>
+    <string name="current_pickup_description">View your current pickups.</string>
 </resources>
