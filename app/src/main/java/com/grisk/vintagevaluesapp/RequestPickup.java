@@ -64,6 +64,8 @@ public class RequestPickup extends AppCompatActivity {
 
     private ImageView mImageThumbnail;
     private Button submitButton;
+    private String imageFileLocation;
+    private Uri currentImage;
 
     // Upload images from phone storage to the database
     ActivityResultLauncher<String> getContent = registerForActivityResult(
@@ -85,6 +87,7 @@ public class RequestPickup extends AppCompatActivity {
 
         // Set thumbnail as picture selected
         mImageThumbnail.setImageURI(result);
+        currentImage = result;
         // Whenever the user presses the submit button, the image will also be uploaded
         submitButton.setOnClickListener(view -> {
 
@@ -95,39 +98,11 @@ public class RequestPickup extends AppCompatActivity {
 
             // We need an id for the picture
             String name = UUID.randomUUID().toString();
+            // Store it in imageFileLocation to be stored in request class
+            imageFileLocation = "images/"+name+"."+imageType;
 
-            BagPicture newBagPicture = new BagPicture(name, "images/"+name+"."+imageType);
-
-
-
-            mDb.collection("bag_pictures").add(newBagPicture)
-                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                        @Override
-                        public void onSuccess(DocumentReference documentReference) {
-                            mStorageRef.child(newBagPicture.getImageFile())
-                                    .putFile(result)
-                                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                        @Override
-                                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                            Toast.makeText(RequestPickup.this,
-                                                    "New picture saved!",
-                                                    Toast.LENGTH_LONG).show();
-
-                                            // Remove image from thumbnail
-                                            mImageThumbnail.setImageURI(null);
-
-                                            // Submit rest of fields data to Firestore
-                                            addRequest();
-                                        }
-                                    })
-                                    .addOnFailureListener(e -> {
-                                        Toast.makeText(RequestPickup.this,
-                                                "Error: Could not save the picture!",
-                                                Toast.LENGTH_LONG).show();
-                                        documentReference.delete();
-                                    });
-                        }
-                    });
+            // Call addRequest and store request class in Firestore with image that was selected
+            addRequest();
 
         });
 
@@ -185,9 +160,6 @@ public class RequestPickup extends AppCompatActivity {
                 takePicture.launch(uri);
             }
         });
-
-
-
 
 
         // Find edit text fields
@@ -321,7 +293,7 @@ public class RequestPickup extends AppCompatActivity {
         }
 
 
-        Request newRequest = new Request(Uid, sFirstName, sLastName, sBags, new Date(), sLocationDescription);
+        Request newRequest = new Request(Uid, sFirstName, sLastName, sBags, new Date(), sLocationDescription, imageFileLocation);
 
         mDb.collection(REQUESTS)
                 .add(newRequest)
@@ -329,6 +301,30 @@ public class RequestPickup extends AppCompatActivity {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Toast.makeText(getApplicationContext(), "Successfully adding " + sFirstName + " " + sLastName, Toast.LENGTH_LONG).show();
+
+                        // Store the image in Storage in Firebase
+                        mStorageRef.child(newRequest.getImageFile())
+                                .putFile(currentImage)
+                                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                    @Override
+                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                        Toast.makeText(RequestPickup.this,
+                                                "New picture saved!",
+                                                Toast.LENGTH_LONG).show();
+
+                                        // Remove image from thumbnail
+                                        mImageThumbnail.setImageURI(null);
+                                    }
+                                })
+                                .addOnFailureListener(e -> {
+                                    Toast.makeText(RequestPickup.this,
+                                            "Error: Could not save the picture!",
+                                            Toast.LENGTH_LONG).show();
+
+                                    // Since image failed, we need to delete the user that was created
+                                    documentReference.delete();
+                                });
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
