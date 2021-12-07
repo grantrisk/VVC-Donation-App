@@ -39,6 +39,7 @@ public class RequestDetailActivity extends AppCompatActivity {
     private TextView bags;
     private TextView description;
     private TextView timeStamp;
+    private TextView requestStatus;
     private ImageView imageView;
 
     private boolean editReceiptButton;
@@ -66,6 +67,7 @@ public class RequestDetailActivity extends AppCompatActivity {
         description = findViewById(R.id.not_location_description_label_items);
         timeStamp = findViewById(R.id.not_time_stamp_label_item);
         imageView = findViewById(R.id.bag_image);
+        requestStatus = findViewById(R.id.has_request_been_fulfilled_status);
 
 
         Intent intent = getIntent();
@@ -97,6 +99,19 @@ public class RequestDetailActivity extends AppCompatActivity {
                 // set time stamp to both views
                 TextView otherTime = findViewById(R.id.yes_time_stamp_label_item);
                 otherTime.setText(timeStamp.getText().toString());
+
+                // Has the request been accepted or completed? Set the text accordingly
+                Boolean hasAccepted = request.getRequestAccepted();
+                Boolean hasCompleted = request.getRequestCompleted();
+                if (hasCompleted){
+                    requestStatus.setText(R.string.has_been_completed);
+                }
+                else if (hasAccepted){
+                    requestStatus.setText(R.string.has_been_accepted);
+                }
+                else {
+                    requestStatus.setText(R.string.has_not_been_accepted);
+                }
 
             }
         });

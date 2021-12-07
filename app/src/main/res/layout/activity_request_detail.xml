@@ -97,13 +97,34 @@
             app:layout_constraintLeft_toRightOf="@+id/not_time_stamp_label"
             app:layout_constraintTop_toTopOf="@+id/not_time_stamp_label"/>
 
+        <TextView
+            android:id="@+id/has_request_been_fulfilled_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/has_request_been_fulfilled_label"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="@+id/not_time_stamp_label"
+            app:layout_constraintTop_toBottomOf="@+id/not_time_stamp_label"/>
+
+        <TextView
+            android:id="@+id/has_request_been_fulfilled_status"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            app:layout_constraintLeft_toRightOf="@+id/has_request_been_fulfilled_label"
+            app:layout_constraintTop_toBottomOf="@+id/not_time_stamp_label"
+            app:layout_constraintRight_toRightOf="parent"/>
+
         <ImageView
             android:id="@+id/bag_image"
             android:layout_width="300dp"
             android:layout_height="300dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="40dp"
             android:contentDescription="@string/bag_image_description"
-            app:layout_constraintTop_toBottomOf="@+id/not_time_stamp_label"
+            app:layout_constraintTop_toBottomOf="@+id/has_request_been_fulfilled_label"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"/>
 

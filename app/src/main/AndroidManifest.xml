@@ -27,12 +27,15 @@
             android:theme="@style/AppTheme.PopupCustomTheme" />
         <activity
             android:name=".CurrentPickups"
+            android:label="@string/current_pickups_name"
             android:exported="false" />
         <activity
             android:name=".FulfillPickupDetail"
+            android:label="@string/fulfill_pick_up_detail_name"
             android:exported="false" />
         <activity
             android:name=".FulfillPickup"
+            android:label="@string/fulfill_pick_up_name"
             android:exported="false" />
         <activity
             android:name=".RequestDetailActivity"
@@ -51,7 +54,8 @@
         <activity
             android:name=".RequestPickup"
             android:exported="false"
-            android:label="@string/request_pickup_activity_name" />
+            android:label="@string/request_pickup_activity_name"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
