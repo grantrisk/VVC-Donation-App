@@ -88,15 +88,22 @@ public class RequestPickup extends AppCompatActivity {
         // Whenever the user presses the submit button, the image will also be uploaded
         submitButton.setOnClickListener(view -> {
 
+            // Make sure fields have been filled out
+            if (!validateForm()) {
+                return;
+            }
+
             // We need an id for the picture
             String name = UUID.randomUUID().toString();
 
             BagPicture newBagPicture = new BagPicture(name, "images/"+name+"."+imageType);
+
+
+
             mDb.collection("bag_pictures").add(newBagPicture)
                     .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         @Override
                         public void onSuccess(DocumentReference documentReference) {
-                            Log.d(TAG, "Picture successfully added!");
                             mStorageRef.child(newBagPicture.getImageFile())
                                     .putFile(result)
                                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -105,6 +112,10 @@ public class RequestPickup extends AppCompatActivity {
                                             Toast.makeText(RequestPickup.this,
                                                     "New picture saved!",
                                                     Toast.LENGTH_LONG).show();
+
+                                            // Remove image from thumbnail
+                                            mImageThumbnail.setImageURI(null);
+
                                             // Submit rest of fields data to Firestore
                                             addRequest();
                                         }
@@ -121,6 +132,14 @@ public class RequestPickup extends AppCompatActivity {
         });
 
 
+    }
+
+    // This is called when the user has not added an image and they clicked the button
+    public void onButtonPressed(View view) {
+        Toast.makeText(RequestPickup.this,
+                "Please fill out all fields.",
+                Toast.LENGTH_LONG).show();
+        validateForm();
     }
 
     @Override
@@ -242,6 +261,11 @@ public class RequestPickup extends AppCompatActivity {
     private boolean validateForm() {
         boolean valid = true;
 
+        sFirstName = eFirstName.getText().toString();
+        sLastName = eLastName.getText().toString();
+        sLocationDescription = eLocationDescription.getText().toString();
+        sBags = eBags.getText().toString();
+
         // First Name
         if (TextUtils.isEmpty(sFirstName)) {
             eFirstName.setError("Required");
@@ -291,11 +315,6 @@ public class RequestPickup extends AppCompatActivity {
 
 
     private void addRequest() {
-
-        sFirstName = eFirstName.getText().toString();
-        sLastName = eLastName.getText().toString();
-        sLocationDescription = eLocationDescription.getText().toString();
-        sBags = eBags.getText().toString();
 
         if (!validateForm()) {
             return;
