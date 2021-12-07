@@ -21,7 +21,7 @@ public class FulfillPickup extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseFirestore mDb = FirebaseFirestore.getInstance();
     private RequestRecyclerAdapter mAdapter;
-
+    private String Uid;
 
 
     @Override
@@ -35,11 +35,13 @@ public class FulfillPickup extends AppCompatActivity {
 
         // Firebase Authentication
         mAuth = FirebaseAuth.getInstance();
+        Uid = mAuth.getUid();
 
         // Firestore Database sorts data by time stamp
+        // Find requests that have not been accepted and is not from the current user
         Query query = mDb.collection(REQUESTS)
                 .whereEqualTo("requestAccepted", false)
-                .orderBy("createdTime", Query.Direction.ASCENDING);
+                .whereNotEqualTo("uid", Uid);
         FirestoreRecyclerOptions<Request> options = new FirestoreRecyclerOptions.Builder<Request>()
                 .setQuery(query, Request.class)
                 .build();

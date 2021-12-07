@@ -39,10 +39,11 @@ public class CurrentPickups extends AppCompatActivity {
         Uid = currentUser.getUid();
 
         // Firestore Database sorts data by time stamp
+        // Display requests that have been accepted and that have not been completed yet
         Query query = mDb.collection(REQUESTS)
                 .whereEqualTo("requestAccepted", true)
-                .whereEqualTo("pickupUid", Uid)
-                .whereEqualTo("requestCompleted", false);
+                .whereEqualTo("requestCompleted", false)
+                .whereEqualTo("pickupUid", Uid);
         FirestoreRecyclerOptions<Request> options = new FirestoreRecyclerOptions.Builder<Request>()
                 .setQuery(query, Request.class)
                 .build();
