@@ -38,4 +38,5 @@
     <string name="current_pickups">Current Pickups:</string>
     <string name="pickup_conformation">Have you successfully picked up the donation?</string>
     <string name="image_text_instructions">Please upload a picture of the bags location:</string>
+    <string name="bag_image_description">A picture of the bags being donated</string>
 </resources>

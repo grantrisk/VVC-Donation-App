@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -74,14 +73,14 @@ public class RequestPickup extends AppCompatActivity {
                 @Override
                 public void onActivityResult(Uri result) {
                     // result will be the file path that the user clicked on
-                    if(result != null) {
+                    if (result != null) {
                         createPictureFromUri(result);
                     }
                 }
             }
     );
 
-    private void createPictureFromUri(Uri result){
+    private void createPictureFromUri(Uri result) {
         ContentResolver cr = getBaseContext().getContentResolver();
         String imageType = cr.getType(result).split("/")[1]; // this will tell us if it is png, jpeg, ... (image/jpeg) and splits the string at "/"
 
@@ -99,7 +98,7 @@ public class RequestPickup extends AppCompatActivity {
             // We need an id for the picture
             String name = UUID.randomUUID().toString();
             // Store it in imageFileLocation to be stored in request class
-            imageFileLocation = "images/"+name+"."+imageType;
+            imageFileLocation = "images/" + name + "." + imageType;
 
             // Call addRequest and store request class in Firestore with image that was selected
             addRequest();
@@ -130,7 +129,7 @@ public class RequestPickup extends AppCompatActivity {
 
         // Gallery button
         ImageButton galleryButton = findViewById(R.id.galleryButton);
-        galleryButton.setOnClickListener(v->{
+        galleryButton.setOnClickListener(v -> {
             getContent.launch("image/*"); //MINE type declared in string format
         });
 
@@ -145,7 +144,7 @@ public class RequestPickup extends AppCompatActivity {
                     @Override
                     public void onActivityResult(Boolean result) {
                         // picture has been taken
-                        if (result == true){
+                        if (result == true) {
                             createPictureFromUri(uri);
                         }
                     }
@@ -312,8 +311,16 @@ public class RequestPickup extends AppCompatActivity {
                                                 "New picture saved!",
                                                 Toast.LENGTH_LONG).show();
 
+                                        // Clear fields ONLY if everything succeeded. If failure allow user to keep values as is
+                                        // Clear out text fields
+                                        eFirstName.setText("");
+                                        eLastName.setText("");
+                                        eBags.setText("");
+                                        eLocationDescription.setText("");
+
                                         // Remove image from thumbnail
                                         mImageThumbnail.setImageURI(null);
+
                                     }
                                 })
                                 .addOnFailureListener(e -> {
@@ -333,12 +340,6 @@ public class RequestPickup extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Failed to add " + sFirstName + " " + sLastName, Toast.LENGTH_LONG).show();
                     }
                 });
-
-        // Clear out text fields
-        eFirstName.setText("");
-        eLastName.setText("");
-        eBags.setText("");
-        eLocationDescription.setText("");
 
     }
 

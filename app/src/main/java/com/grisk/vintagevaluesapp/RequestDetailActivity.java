@@ -1,11 +1,13 @@
 package com.grisk.vintagevaluesapp;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +20,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -27,6 +31,7 @@ public class RequestDetailActivity extends AppCompatActivity {
     public static final String DOCID = "docID";
     private String docID;
     private FirebaseFirestore mDb = FirebaseFirestore.getInstance();
+    private final StorageReference mStorageRef = FirebaseStorage.getInstance().getReference();
     private Request request;
     private final SimpleDateFormat format = new SimpleDateFormat("MM-dd-yy", Locale.US);
 
@@ -34,6 +39,7 @@ public class RequestDetailActivity extends AppCompatActivity {
     private TextView bags;
     private TextView description;
     private TextView timeStamp;
+    private ImageView imageView;
 
     private boolean editReceiptButton;
     private ConstraintLayout mEditGroup;
@@ -57,6 +63,7 @@ public class RequestDetailActivity extends AppCompatActivity {
         bags = findViewById(R.id.not_bags_label_items);
         description = findViewById(R.id.not_location_description_label_items);
         timeStamp = findViewById(R.id.not_time_stamp_label_item);
+        imageView = findViewById(R.id.bag_image);
 
 
         Intent intent = getIntent();
@@ -74,6 +81,16 @@ public class RequestDetailActivity extends AppCompatActivity {
                 bags.setText(request.getBags());
                 description.setText(request.getPickupDescription());
                 timeStamp.setText(format.format(request.getCreatedTime()));
+
+                String imageFileLocation = request.getImageFile();
+                StorageReference image = mStorageRef.child(imageFileLocation);
+
+                // Glide is a 3rd party library that simplifies image downloading, caching,
+                // and injection into your UI. This tells Glide to load the image from Storage and
+                // put it in the ImageView when complete.
+                GlideApp.with(RequestDetailActivity.this)
+                        .load(image)
+                        .into(imageView);
 
                 // set time stamp to both views
                 TextView otherTime = findViewById(R.id.yes_time_stamp_label_item);
