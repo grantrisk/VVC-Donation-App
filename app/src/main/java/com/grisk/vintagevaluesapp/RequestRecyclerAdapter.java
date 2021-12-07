@@ -15,7 +15,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-public class RequestRecyclerAdapter extends FirestoreRecyclerAdapter<Request, RequestRecyclerAdapter.RequestViewHolder>{
+public class RequestRecyclerAdapter extends FirestoreRecyclerAdapter<Request, RequestRecyclerAdapter.RequestViewHolder> {
 
 
     public interface OnItemClickListener {

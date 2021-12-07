@@ -10,15 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-<!--        this is for storing pictures-->
+        <!--        this is for storing pictures-->
         <provider
-            android:authorities="com.grisk.vintagevaluesapp.fileprovider"
             android:name="androidx.core.content.FileProvider"
+            android:authorities="com.grisk.vintagevaluesapp.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"/>
+                android:resource="@xml/file_paths" />
         </provider>
 
         <activity
@@ -27,16 +27,16 @@
             android:theme="@style/AppTheme.PopupCustomTheme" />
         <activity
             android:name=".CurrentPickups"
-            android:label="@string/current_pickups_name"
-            android:exported="false" />
+            android:exported="false"
+            android:label="@string/current_pickups_name" />
         <activity
             android:name=".FulfillPickupDetail"
-            android:label="@string/fulfill_pick_up_detail_name"
-            android:exported="false" />
+            android:exported="false"
+            android:label="@string/fulfill_pick_up_detail_name" />
         <activity
             android:name=".FulfillPickup"
-            android:label="@string/fulfill_pick_up_name"
-            android:exported="false" />
+            android:exported="false"
+            android:label="@string/fulfill_pick_up_name" />
         <activity
             android:name=".RequestDetailActivity"
             android:exported="false"
@@ -55,7 +55,7 @@
             android:name=".RequestPickup"
             android:exported="false"
             android:label="@string/request_pickup_activity_name"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

@@ -1,10 +1,8 @@
 package com.grisk.vintagevaluesapp;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -103,13 +101,11 @@ public class RequestDetailActivity extends AppCompatActivity {
                 // Has the request been accepted or completed? Set the text accordingly
                 Boolean hasAccepted = request.getRequestAccepted();
                 Boolean hasCompleted = request.getRequestCompleted();
-                if (hasCompleted){
+                if (hasCompleted) {
                     requestStatus.setText(R.string.has_been_completed);
-                }
-                else if (hasAccepted){
+                } else if (hasAccepted) {
                     requestStatus.setText(R.string.has_been_accepted);
-                }
-                else {
+                } else {
                     requestStatus.setText(R.string.has_not_been_accepted);
                 }
 
@@ -118,7 +114,7 @@ public class RequestDetailActivity extends AppCompatActivity {
 
     }
 
-    public void onDeleteRequest (View view){
+    public void onDeleteRequest(View view) {
 
 
         // Create a reference to the file and delete it
