@@ -1,15 +1,25 @@
 package com.grisk.vintagevaluesapp;
 
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,8 +31,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
 import java.util.Date;
+import java.util.UUID;
 
 public class RequestPickup extends AppCompatActivity {
 
@@ -31,8 +46,10 @@ public class RequestPickup extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore mDb = FirebaseFirestore.getInstance();
+    private final StorageReference mStorageRef = FirebaseStorage.getInstance().getReference();
     private RequestRecyclerAdapter mAdapter;
     private FirebaseUser currentUser;
+    private String Uid;
 
     private EditText eFirstName;
     private EditText eLastName;
@@ -45,14 +62,114 @@ public class RequestPickup extends AppCompatActivity {
     private String sLocationDescription;
     private int iBags;
 
-    private String Uid;
+    private ImageView mImageThumbnail;
+    private Button submitButton;
 
+    // Upload images from phone storage to the database
+    ActivityResultLauncher<String> getContent = registerForActivityResult(
+            new ActivityResultContracts.GetContent(),
+            new ActivityResultCallback<Uri>() {
+                @Override
+                public void onActivityResult(Uri result) {
+                    // result will be the file path that the user clicked on
+                    if(result != null) {
+                        createPictureFromUri(result);
+                    }
+                }
+            }
+    );
+
+    private void createPictureFromUri(Uri result){
+        ContentResolver cr = getBaseContext().getContentResolver();
+        String imageType = cr.getType(result).split("/")[1]; // this will tell us if it is png, jpeg, ... (image/jpeg) and splits the string at "/"
+
+        // Set thumbnail as picture selected
+        mImageThumbnail.setImageURI(result);
+        // Whenever the user presses the submit button, the image will also be uploaded
+        submitButton.setOnClickListener(view -> {
+
+            // We need an id for the picture
+            String name = UUID.randomUUID().toString();
+
+            BagPicture newBagPicture = new BagPicture(name, "images/"+name+"."+imageType);
+            mDb.collection("bag_pictures").add(newBagPicture)
+                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            Log.d(TAG, "Plant successfully added!");
+                            mStorageRef.child(newBagPicture.getImageFile())
+                                    .putFile(result)
+                                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                        @Override
+                                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                            Toast.makeText(RequestPickup.this,
+                                                    "New plant picture saved!",
+                                                    Toast.LENGTH_LONG).show();
+                                        }
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Toast.makeText(RequestPickup.this,
+                                                "Error: Could not save the plant!",
+                                                Toast.LENGTH_LONG).show();
+                                        documentReference.delete();
+                                    });
+                        }
+                    });
+
+        });
+
+
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_pickup);
 
+        // Find picture buttons
+        mImageThumbnail = findViewById(R.id.thumbnail);
+
+        // Get submit button to make a listener to uplaod images
+        submitButton = findViewById(R.id.submit_button);
+
+        // Gallery button
+        ImageButton galleryButton = findViewById(R.id.galleryButton);
+        galleryButton.setOnClickListener(v->{
+            getContent.launch("image/*"); //MINE type declared in string format
+        });
+
+        // Allows us to use camera plus files_path.xml and manifest paths and store files
+        File imageFile = new File(getFilesDir(), "my_images");
+        Uri uri = FileProvider.getUriForFile(this, "com.grisk.vintagevaluesapp.fileprovider", imageFile);
+
+        // Use camera to take picture
+        ActivityResultLauncher<Uri> takePicture = registerForActivityResult(
+                new ActivityResultContracts.TakePicture(),
+                new ActivityResultCallback<Boolean>() {
+                    @Override
+                    public void onActivityResult(Boolean result) {
+                        // picture has been taken
+                        if (result == true){
+                            createPictureFromUri(uri);
+                        }
+                    }
+                }
+        );
+
+        // Camera button
+        ImageButton cameraButton = findViewById(R.id.cameraButton);
+        cameraButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                takePicture.launch(uri);
+            }
+        });
+
+
+
+
+
+        // Find edit text fields
         eFirstName = findViewById(R.id.firstNameEditText);
         eLastName = findViewById(R.id.lastNameEditText);
         eBags = findViewById(R.id.bagsEditText);
