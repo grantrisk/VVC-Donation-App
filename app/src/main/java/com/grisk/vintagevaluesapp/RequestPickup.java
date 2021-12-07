@@ -96,20 +96,22 @@ public class RequestPickup extends AppCompatActivity {
                     .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         @Override
                         public void onSuccess(DocumentReference documentReference) {
-                            Log.d(TAG, "Plant successfully added!");
+                            Log.d(TAG, "Picture successfully added!");
                             mStorageRef.child(newBagPicture.getImageFile())
                                     .putFile(result)
                                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                         @Override
                                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                             Toast.makeText(RequestPickup.this,
-                                                    "New plant picture saved!",
+                                                    "New picture saved!",
                                                     Toast.LENGTH_LONG).show();
+                                            // Submit rest of fields data to Firestore
+                                            addRequest();
                                         }
                                     })
                                     .addOnFailureListener(e -> {
                                         Toast.makeText(RequestPickup.this,
-                                                "Error: Could not save the plant!",
+                                                "Error: Could not save the picture!",
                                                 Toast.LENGTH_LONG).show();
                                         documentReference.delete();
                                     });
@@ -288,7 +290,7 @@ public class RequestPickup extends AppCompatActivity {
     }
 
 
-    public void addRequest(View v) {
+    private void addRequest() {
 
         sFirstName = eFirstName.getText().toString();
         sLastName = eLastName.getText().toString();
