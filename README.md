@@ -33,12 +33,18 @@
 
 
 <!-- USAGE EXAMPLES -->
-## Usage
-
-<a>
-  <img src="images/login" alt="Logo" width="80" height="80">
-</a>
-
+## Screen Shots
+<table>
+  <tr>
+    <td><img src="img/login.png" alt="Logo" width="270" height="585"></td>
+    <td><img src="img/main-menu.png" alt="Logo" width="270" height="585"></td>
+    <td><img src="img/request-pickup.png" alt="Logo" width="270" height="585"></td>
+  </tr>
+  <tr>
+    <td><img src="img/request-pickup-error.png" alt="Logo" width="270" height="585"></td>
+    <td><img src="img/request-detail.png" alt="Logo" width="270" height="585"></td>
+  </tr>
+</table>
 
 <!-- CONTACT -->
 ## Contact
